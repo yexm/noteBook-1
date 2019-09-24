@@ -468,21 +468,36 @@ public class Demo {
 
 1.1 获取字符串的长度
 
-`int length();`
+```java
+int length();
+```
 
 1.2 根据位置获取字符
 
-`char charAt(int index);`
+```java
+char charAt(int index);
+```
 
 1.3 根据字符获取在字符串中第一次出现的位置
 
-`int indexOf(int ch);`
+```java
+int indexOf(int ch);
+int indexOf(int ch, int fromIndex);
+int indexOf(String str, int fromIndex);
+```
 
-`int indexOf(int ch, int fromIndex);`
+1.4 获取子串
 
-`int indexOf(String str, int fromIndex);`
+```java
+String substring(int begin, int end)
 
+//不包含 end
+```
 
+2.转换：
 
+2.1 将字符串切片
 
-
+```java
+String[]  
+```
