@@ -437,7 +437,9 @@ public class Demo {
 
 ## JAVA API
 
-### String类
+### String
+
+#### String类
 
 **特点:**
 
@@ -499,5 +501,206 @@ String substring(int begin, int end)
 2.1 将字符串切片
 
 ```java
-String[]  
+String[] split(String regex)
+```
+
+2.2 将字符串、字节返回字符、字节数组
+
+```java
+char[] toCharArray();
+byte[] getBytes();
+```
+
+2.3 大小写转换
+
+```java
+String toUppercase();
+String toLowercase();
+```
+
+2.4 字符串修改
+
+```java
+String replace(Char oldChar, Char newChar)
+String replace(String s1, String s2)
+```
+
+2.5 清理字符串前后空格
+
+```java
+String trim()
+```
+
+2.6 字符串连接
+
+```java
+String concat(String string)
+```
+
+3.判断
+
+3.1 两个字符串是否相同
+
+```java
+boolean equals(Object obj);
+boolean equalsIgnoreCase(Object obj);
+```
+
+3.2 字符串包含
+
+```java
+boolean contains(String string)
+```
+
+3.3 以指定字符串开头/结尾
+
+```java
+boolean startsWith(String str);
+boolean endsWith(String str);
+```
+
+4.比较
+
+4.1比较字符串的大小
+
+```java
+int compareTo(String anotherString)
+```
+
+#### StringBuffer类
+
+字符串缓冲区，用于临时存储数据
+
+特点：
+
+1. 长度可变
+2. 可以存储不同数据类型
+3. 最终转成字符串使用
+
+是一个容器对象，具备以下功能CURD操作：
+
+添加：
+
+```java
+StringBuffer append(data)
+StringBuffer insert(index, data)
+```
+
+删除：
+
+```java
+StringBuffer delete(start, end) //含头不含尾(0,str.lenght())清空缓冲区
+StringBuffer deleteCharAt(int index) //删除指定位置的元素
+
+//注意setLength(int length)方法，length=0相当于清空字符串
+```
+
+查找, 同字符串
+
+修改：
+
+```java
+StringBuffer replace(start, end, string)
+void setCharAt(int index, char chr)
+```
+
+#### StringBuilder类(1.5版本后产生)
+
+功能和用法一模一样，StringBuilder不保证线程安全
+
+StringBuilder用于单线程。
+
+### 基本数据类型对象包装类
+
+基本数据类型：
+
+byte --> Byte
+short --> Short
+int --> Integer
+long --> Long
+float --> Float
+double --> Double
+char --> Character
+boolean --> Boolean
+
+### 集合框架
+
+对象用于封装特有数据，多了就需要存储，对象个数不确定就使用集合容器；
+
+**特点：**
+
+1. 用于存储对象的容器；
+2. 集合的长度可变；
+3. 集合中不可以存储基本数据类型值。
+
+框架的顶层Collection接口：
+
+1.添加:
+
+```java
+boolean add(Object obj);
+boolean addAll(Collection coll);
+```
+
+2.删除:
+
+```java
+boolean remove(Object obj);
+boolean removeAll(Collection coll);
+void clear();
+```
+
+3.判断：
+
+```java
+boolean contains(Object obj);
+boolean containsAll(Collection coll);
+boolean isEmpty();
+```
+
+4.获取：
+
+```java
+int size();
+Iterator iterator();
+```
+
+5.其他：
+
+```java
+boolean retainALL(Collection coll);
+Object[] toArray();
+```
+
+```java
+Collection
+    | -- List, 有序，可重复
+    | -- Set, 无序，不可重复·
+```
+
+List特有的常见方法：
+
+共性特点，可以操作角标
+
+1.添加：
+void add(index, element);
+void addAll(index, collection);
+2.删除：
+Object remve(index);
+3.修改：
+Object set(index, element);
+4.获取：
+Object get(index);
+int IndexOf(object);
+int lastIndexOf(object);
+5.切片：
+List subList(start, end);
+
+listIterator()返回ListIterator
+
+```java
+List:
+    |--Vector: 内部数据结构是数组。每个元素有编号，连续存储。线程安全。增删、查询够很慢。
+    |--ArrayList:内部数组数据结构。不同步。使用单线程，效率高。Vector几乎不用了。查询效率高。
+    |--LinkedList:内部是连表数据结构。不同步，效率高。增删效率高。
 ```
