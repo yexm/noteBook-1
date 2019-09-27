@@ -1,6 +1,6 @@
 # JAVA黑马教程
 
-## 多线程
+## 1 多线程
 
 线程安全问题产生原因：
 
@@ -29,7 +29,7 @@
 
 ---
 
-### 线程安全
+### 1.1线程安全
 
 当一个线程通过多行代码操作共享数据，未执行完成时其他线程参与了运算，从而导致**线程安全问题**
 
@@ -58,7 +58,7 @@ _**同步函数与同步代码块的区别：**_
 * 同步代码块的锁是任意；
 * 实际开发中，建议使用同步代码块。
 
-### 单例设计模式
+### 1.2单例设计模式
 
 _**"饿汉模式"：**_
 
@@ -94,11 +94,11 @@ class Single
 }
 ```
 
-### 死锁
+### 1.3死锁
 
 同步嵌套，交叉引用。才会造成死锁
 
-### 线程间通信
+### 1.4线程间通信
 
 _**等待唤醒机制：**_
 
@@ -435,11 +435,11 @@ public class Demo {
 }
 ```
 
-## JAVA API
+## 2 JAVA API
 
-### String
+### 2.1 String
 
-#### String类
+#### 2.1.1 String类
 
 **特点:**
 
@@ -567,7 +567,7 @@ boolean endsWith(String str);
 int compareTo(String anotherString)
 ```
 
-#### StringBuffer类
+#### 2.1.2 StringBuffer类
 
 字符串缓冲区，用于临时存储数据
 
@@ -604,13 +604,13 @@ StringBuffer replace(start, end, string)
 void setCharAt(int index, char chr)
 ```
 
-#### StringBuilder类(1.5版本后产生)
+#### 2.1.3 StringBuilder类(1.5版本后产生)
 
 功能和用法一模一样，StringBuilder不保证线程安全
 
 StringBuilder用于单线程。
 
-### 基本数据类型对象包装类
+### 2.2 基本数据类型对象包装类
 
 基本数据类型：
 
@@ -623,7 +623,7 @@ double --> Double
 char --> Character
 boolean --> Boolean
 
-### 集合框架
+### 2.3 集合框架
 
 对象用于封装特有数据，多了就需要存储，对象个数不确定就使用集合容器；
 
