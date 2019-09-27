@@ -682,18 +682,18 @@ List特有的常见方法：
 
 共性特点，可以操作角标
 
-1.添加：
+1. 添加：
 void add(index, element);
 void addAll(index, collection);
-2.删除：
+2. 删除：
 Object remve(index);
-3.修改：
+3. 修改：
 Object set(index, element);
-4.获取：
+4. 获取：
 Object get(index);
 int IndexOf(object);
 int lastIndexOf(object);
-5.切片：
+5. 切片：
 List subList(start, end);
 
 listIterator()返回ListIterator
