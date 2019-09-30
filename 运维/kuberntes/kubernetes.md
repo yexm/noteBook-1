@@ -1,3 +1,5 @@
+# kubernetes 1.15
+
 kubernetes安装部署
 
 yum install -y bash-com* ipvsadm
