@@ -678,7 +678,7 @@ Collection
     | -- Set, 无序，不可重复·
 ```
 
-List特有的常见方法：
+#### List特有的常见方法
 
 共性特点，可以操作角标
 
@@ -704,3 +704,22 @@ List:
     |--ArrayList:内部数组数据结构。不同步。使用单线程，效率高。Vector几乎不用了。查询效率高。
     |--LinkedList:内部是连表数据结构。不同步，效率高。增删效率高。
 ```
+
+#### Set常见方法
+
+Set接口中的方法与Conllection方法一致
+
+```java
+    |--HashSet：内部数据结构是哈希表，线程不安全；
+        通过hashCode和equals方法来完成对象的唯一性，
+        if hashCode不相同，直接存储到hash表中；
+        else 使用equals方法判断
+            if true
+                视为相同元素不存
+            else
+                进行存储
+        注意：使用HashSet一定要覆写hashCode和equals方法
+        
+    |--TreeSet：
+```
+
