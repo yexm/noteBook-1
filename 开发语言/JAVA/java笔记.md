@@ -604,7 +604,7 @@ StringBuffer replace(start, end, string)
 void setCharAt(int index, char chr)
 ```
 
-#### 2.1.3 StringBuilder类(1.5版本后产生)
+#### 2.1.3 StringBuilder类\(1.5版本后产生\)
 
 功能和用法一模一样，StringBuilder不保证线程安全
 
@@ -614,14 +614,14 @@ StringBuilder用于单线程。
 
 基本数据类型：
 
-byte --> Byte
-short --> Short
-int --> Integer
-long --> Long
-float --> Float
-double --> Double
-char --> Character
-boolean --> Boolean
+byte --&gt; Byte  
+short --&gt; Short  
+int --&gt; Integer  
+long --&gt; Long  
+float --&gt; Float  
+double --&gt; Double  
+char --&gt; Character  
+boolean --&gt; Boolean
 
 ### 2.3 集合框架
 
@@ -683,26 +683,35 @@ Collection
 共性特点，可以操作角标
 
 1. 添加：
-void add(index, element);
-void addAll(index, collection);
+   void add\(index, element\);
+   void addAll\(index, collection\);
 2. 删除：
-Object remve(index);
+   Object remve\(index\);
 3. 修改：
-Object set(index, element);
+   Object set\(index, element\);
 4. 获取：
-Object get(index);
-int IndexOf(object);
-int lastIndexOf(object);
+   Object get\(index\);
+   int IndexOf\(object\);
+   int lastIndexOf\(object\);
 5. 切片：
-List subList(start, end);
+   List subList\(start, end\);
 
-listIterator()返回ListIterator
+listIterator\(\)返回ListIterator
 
 ```java
 List:
     |--Vector: 内部数据结构是数组。每个元素有编号，连续存储。线程安全。增删、查询够很慢。
     |--ArrayList:内部数组数据结构。不同步。使用单线程，效率高。Vector几乎不用了。查询效率高。
     |--LinkedList:内部是连表数据结构。不同步，效率高。增删效率高。
+    
+    
+LinkList
+在JDK1.6后
+getFirst(); --> peekFirst();
+getLast(); --> peekLask();
+
+removeFirst(); --> pollFirst();
+removeLast(); --> pollLast();
 ```
 
 #### Set常见方法
@@ -721,3 +730,6 @@ Set接口中的方法与Conllection方法一致
         注意：使用HashSet一定要覆写hashCode和equals方法
     |--TreeSet：
 ```
+
+
+
