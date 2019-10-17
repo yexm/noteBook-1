@@ -727,8 +727,13 @@ Set接口中的方法与Conllection方法一致
                 视为相同元素不存
             else
                 进行存储
+        *** 首先计算hashcode，相同再使用equals方法判定
         注意：使用HashSet一定要覆写hashCode和equals方法
-    |--TreeSet：
+    |--TreeSet：自然顺序排序，可以对Set集合中的元素进行排序
+                判断元素唯一性的方式：通过compareTo方法决定
+                如果不要按照对象中具备的自然顺序，若果对象不具备自然顺序，可以使用TreeSet集合的第二种方式：
+                让集合具备比较功能
+        
 ```
 
 
