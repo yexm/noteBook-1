@@ -730,11 +730,185 @@ Set接口中的方法与Conllection方法一致
         *** 首先计算hashcode，相同再使用equals方法判定
         注意：使用HashSet一定要覆写hashCode和equals方法
     |--TreeSet：自然顺序排序，可以对Set集合中的元素进行排序
-                判断元素唯一性的方式：通过compareTo方法决定
+                判断元素唯一性的方式：实现comparable接口，覆盖compareTo()
                 如果不要按照对象中具备的自然顺序，若果对象不具备自然顺序，可以使用TreeSet集合的第二种方式：
-                让集合具备比较功能
-        
+                让集合具备比较功能，定义类实现Comparator接口，覆盖compare方法，将该类对象作为参数传递给TreeSet集合的构造函数，比较器相对常用一些。
 ```
 
+#### 泛型
+
+1.5出现的，安全机制
+
+**好处：**
+
+1. 将运行时期的问题转ClassCastException到了编译时期；
+2. 避免了强制转换的麻烦。
+
+<>当操作引用数据类型，不确定的时候，就使用泛型，将要操作的引用数据类型传入即可；就是用于接收具体引用数据类型参数范围。
+
+在程序中只要用到了带有<>的类或者接口，就要明确传入具体的引用数据类型。为了兼容类加载器。
+
+泛型用于 ***编译时期***，确保类型的安全
+运行时会将泛型去掉，生成的class文件中，是不带泛型的，这称之为泛型的擦除。
+泛型的补偿，运行时通过获取元素类型进行转换动作，不用使用者强制转换了。
+
+```java
+/**
+ * Copyright (C), 2018-2019, Personality
+ * FileName: GD2
+ * Author:   liuz
+ * Date:     2019/10/17 17:28
+ * Description:
+ * History:
+ * <author>          <time>          <version>          <desc>
+ * 作者姓名           修改时间           版本号              描述
+ */
+package com.liuz.generic.demo;
+
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.TreeSet;
+
+/**
+ * 〈一句话功能简述〉<br>
+ * 〈〉
+ *
+ * @author liuz
+ * @create 2019/10/17
+ * @since 1.0.0
+ */
+
+class Person implements Comparable<Person> {
+    private String name;
+    private Integer age;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equals(name, person.name) &&
+                Objects.equals(age, person.age);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return this.name.compareTo(o.name) == 0 ? this.age - o.age : this.name.compareTo(o.name);
+    }
+
+    public Person() {
+        super();
+    }
+
+    public Person(String name, Integer age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+}
 
 
+class OrderByAge implements Comparator<Person> {
+    @Override
+    public int compare(Person o1, Person o2) {
+        return o1.getAge() - o2.getAge() == 0 ? o1.getName().compareTo(o2.getName()) : o1.getAge() - o2.getAge();
+    }
+}
+
+
+public class GD2 {
+    public static void main(String[] args) {
+        TreeSet<Person> ts = new TreeSet<Person>(new OrderByAge());
+
+        ts.add(new Person("zhangsan", 21));
+        ts.add(new Person("lisi", 22));
+        ts.add(new Person("wangwu", 21));
+        ts.add(new Person("zhaoliu", 25));
+
+        Iterator<Person> it = ts.iterator();
+
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
+    }
+
+}
+```
+
+泛型的自定义演示
+
+泛型类的使用，在于不确定传入的引用类型
+
+```java
+public class Tools<E> {
+
+    private E object;
+
+    public E getObject() {
+        return object;
+    }
+
+    public void setObject(E object) {
+        this.object = object;
+    }
+    // 泛型定义再方法上接收任意类型参数
+    public <W> void show(W obj) {
+        System.out.println("show: " + obj.toString());
+    }
+
+}
+```
+
+当方法静态时，不能访问类上定义的泛型，如果使用泛型，只能将泛型定义再方法上。
+
+#### Map集合
+
+接口 Map<K,V>
+
+一次添加一对元素，Conllection一次添加一个元素，Map称为双列结合。
+
+Map集合中必须保证key的唯一性，与python的字典类型一致。
+
+##### 常用方法：
+
+1.添加
+value put(key,value):return前一个和key关联的值，如果没有返回null
+2.删除
+void clear();清空Map集合
+value remove(key):根据指定的key删除键值对
+3.判断
+boolean containsKey(key);
+boolean containsValue(value);
+boolean isEmpty();
+4.获取
+value get(key);可以通过返回空判断是否包含指定键
+int size();
