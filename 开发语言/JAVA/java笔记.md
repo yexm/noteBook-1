@@ -889,6 +889,35 @@ public class Tools<E> {
 ```
 
 当方法静态时，不能访问类上定义的泛型，如果使用泛型，只能将泛型定义再方法上。
+还可以使用泛型接口，具体深刻时候指定类型，随意。
+泛型通配符：?未知类型
+
+泛型限定，可以对类型限定：
+
+```bash
+<? extends E>接收E类型或E的子类型对象，上限！
+#一般在存储元素的时候使用上限。不会出现类型安全隐患。
+
+<? super E>接收E类型或E类型父类型对象，下限！
+#一般在去除元素的时候使用下限。
+```
+
+#### 集合使用技巧
+
+**需要唯一Set**
+需要顺序TreeSet；不需要HashSet，但是想要一个和存储一致的顺序：LinkedHashSet
+
+**不需要唯一List**
+需要频繁增删LinkedList，不需要ArrayList
+
+```bash
+看到array，数组，查询快，有角标；
+看到link，链表，增删快，有add,get,remove+first,last方法
+看到hash,哈希表，覆盖hashcode和equals
+看到tree，二叉树，需要实现Comparable或Comparator接口
+
+以上均为不同步
+```
 
 #### Map集合
 
