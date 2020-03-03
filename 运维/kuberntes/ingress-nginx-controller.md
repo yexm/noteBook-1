@@ -28,5 +28,5 @@
 | nginx.ingress.kubernetes.io/server-snippet | 自定义server配置段 |
 | nginx.ingress.kubernetes.io/whitelist-source-range | 客户端源地址白名单（可测试实现切运维） |
 
-
+另外，nginx-controller支持lua实现的waf策略，以提供服务的安全性保证。
 
