@@ -13,6 +13,7 @@
 | nginx.ingress.kubernetes.io/enable-cors | 是否允许跨域 |
 | nginx.ingress.kubernetes.io/cors-allow-methods | 控制可接受的方法，默认为"GET ,PUT, DELETE, PATCH, OPTIONS" |
 | nignx.ingress.kubernetes.io/cors-allow-headers | 可接受的Headers，默认：DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Authorization |
+|  |  |
 
 
 
