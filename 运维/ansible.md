@@ -379,7 +379,7 @@ tasks:
 
 ## 循环
 
-### 标准循环
+#### 标准循环
 
 ``` YAML
 - name: add several users
@@ -464,5 +464,109 @@ changed: [centos7] => (item={'key': 'zhangsan', 'value': {'name': 'Zhang San', '
 ```
 在role中使用时相对路径时，ansible会把路径映射到roles/rolename/files目录中。
 
+#### with_subelements
  ***`with_subelements`使用方法未理解透彻***
 
+#### with_sequence数字序列循环
+
+``` YAML
+---
+- hosts: all
+
+  tasks:
+
+    # create groups
+    - group: name=evens state=present
+    - group: name=odds state=present
+
+    # create some test users
+    - user: name={{ item }} state=present groups=evens
+      with_sequence: start=0 end=32 format=testuser%02x
+
+    # create a series of directories with even numbers for some reason
+    - file: dest=/var/stuff/{{ item }} state=directory
+      with_sequence: start=4 end=16 stride=2
+
+    # a simpler way to use the sequence plugin
+    # create 4 groups
+    - group: name=group{{ item }} state=present
+      with_sequence: count=4
+```
+
+#### 随机循环
+
+``` YAML
+- debug: msg={{ item }}
+  with_random_choice:
+     - "go through the door"
+     - "drink from the goblet"
+     - "press the red button"
+     - "do nothing"
+```
+
+#### Do-Until循环
+
+``` YAML
+- action: shell /usr/bin/foo
+  register: result
+  until: result.stdout.find("all systems go") != -1
+  retries: 5
+  delay: 10
+```
+
+#### 查找第一个匹配的文件
+
+``` YAML
+- name: INTERFACES | Create Ansible header for /etc/network/interfaces
+  template: src={{ item }} dest=/etc/foo.conf
+  with_first_found:
+    - "{{ansible_virtualization_type}}_foo.conf"
+    - "default_foo.conf"
+```
+
+# 最佳实践
+
+## Content Organization
+
+**目录层级结构**
+
+``` bash
+production                # inventory file for production servers 关于生产环境服务器的清单文件
+stage                     # inventory file for stage environment 关于 stage 环境的清单文件
+
+group_vars/
+   group1                 # here we assign variables to particular groups 这里我们给特定的组赋值
+   group2                 # ""
+host_vars/
+   hostname1              # if systems need specific variables, put them here 如果系统需要特定的变量,把它们放置在这里.
+   hostname2              # ""
+
+library/                  # if any custom modules, put them here (optional) 如果有自定义的模块,放在这里(可选)
+filter_plugins/           # if any custom filter plugins, put them here (optional) 如果有自定义的过滤插件,放在这里(可选)
+
+site.yml                  # master playbook 主 playbook
+webservers.yml            # playbook for webserver tier Web 服务器的 playbook
+dbservers.yml             # playbook for dbserver tier 数据库服务器的 playbook
+
+roles/
+    common/               # this hierarchy represents a "role" 这里的结构代表了一个 "role"
+        tasks/            #
+            main.yml      #  <-- tasks file can include smaller files if warranted
+        handlers/         #
+            main.yml      #  <-- handlers file
+        templates/        #  <-- files for use with the template resource
+            ntp.conf.j2   #  <------- templates end in .j2
+        files/            #
+            bar.txt       #  <-- files for use with the copy resource
+            foo.sh        #  <-- script files for use with the script resource
+        vars/             #
+            main.yml      #  <-- variables associated with this role
+        defaults/         #
+            main.yml      #  <-- default lower priority variables for this role
+        meta/             #
+            main.yml      #  <-- role dependencies
+
+    webtier/              # same kind of structure as "common" was above, done for the webtier role
+    monitoring/           # ""
+    fooapp/               # ""
+```
