@@ -219,3 +219,41 @@ playbook文件配置如下：
   roles:
     - { role: some_role, when: "ansible_os_family == 'RedHat'" }
 ```
+
+可以为role设定tag
+
+``` YAML
+---
+
+- hosts: webservers
+  roles:
+    - { role: foo, tags: ["bar", "baz"] }
+```
+
+使用roles的playbook仍然可以使用tasks，但tasks将在所有roles执行完毕之后执行，如果需要调整顺序，可以通过使用，pre_tasks和post_tasks实现循序的控制。
+
+``` YAML
+---
+
+- hosts: webservers
+
+  pre_tasks:
+    - shell: echo 'hello'
+
+  roles:
+    - { role: some_role }
+
+  tasks:
+    - shell: echo 'still busy'
+
+  post_tasks:
+    - shell: echo 'goodbye'
+```
+
+**Role默认变量**
+
+在`defaults/mail.yml`中设置的变量拥有全局最低的优先级，可被其他地方的变量所覆盖。
+
+**Role依赖**
+
+在`meta/mail.yml`可以引入其他依赖的Role，这将自动的拉取依赖的Role到现在使用的Role中。
