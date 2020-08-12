@@ -197,3 +197,25 @@ playbook文件配置如下：
      - common
      - webservers
 ```
+
+可以使用参数化的role
+
+```YAML
+---
+
+- hosts: webservers
+  roles:
+    - common
+    - { role: foo_app_instance, dir: '/opt/a',  port: 5000 }
+    - { role: foo_app_instance, dir: '/opt/b',  port: 5001 }
+```
+
+可使用条件出发指定role
+
+``` YAML 
+---
+
+- hosts: webservers
+  roles:
+    - { role: some_role, when: "ansible_os_family == 'RedHat'" }
+```
