@@ -173,3 +173,27 @@ handlers模块的使用方式与Task类似。
 
 
 ### Role
+Role是一种ansible playbook的文件组织方式
+一般组织结构为：
+
+``` bash
+roles
+		|- rolename
+		   |- files/
+		   |- templates/
+		   |- tasks/
+		   |- handlers/
+		   |- vars/
+		   |- defaults/
+		   |- meta/
+```
+
+playbook文件配置如下：
+
+```YAML
+---
+- hosts: webservers
+  roles:
+     - common
+     - webservers
+```
