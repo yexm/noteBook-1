@@ -257,3 +257,112 @@ playbook文件配置如下：
 **Role依赖**
 
 在`meta/mail.yml`可以引入其他依赖的Role，这将自动的拉取依赖的Role到现在使用的Role中。
+实例：
+
+```YAML
+---
+dependencies:
+  - { role: common, some_parameter: 3 }
+  - { role: apache, port: 80 }
+  - { role: postgres, dbname: blarg, other_parameter: 12 }
+```
+
+***角色依赖可以通过绝对路径直接引用。***
+
+角色可以通过源码仓库和tar包来指定，如下所示：
+
+``` YAML
+---
+dependencies:
+  - { role: 'git+http://git.example.com/repos/role-foo,v1.1,foo' }
+  - { role: '/path/to/tar/file.tgz,,friendly-name' }
+```
+
+依赖会被递归调用，如果依赖重复引用了某个Role该Role只会被执行一次。但这种默认行为可以被修改，通过设置`allow_duplicates: yes`来实现。
+
+# Variables
+请使用Python相同的变量定义方式。
+
+## Inventory文件中定义变量
+略
+## 在playbook中定义变量
+
+``` YAML
+- hosts: webservers
+  vars:
+    http_port: 80
+```
+## 在Role中定义变量
+定义在role组织的文件中
+
+## 变量的使用
+jinja2，python的变量引用方式`{{ 变量名 }}`， 可以使用jinja2的过滤属性，但是并不常用。
+
+## Yaml陷阱
+为了解决yaml文件解析过程中对{}理解为字典的问题，当所在行以引用变量开头时，应该使用`""`号将内容包含在内。
+
+## Fact
+可以直接应用Fact中包含的变量，如果不需要使用，可以设置关闭Fact，如果所示：
+
+``` YAML
+- hosts: whatever
+  gather_facts: no
+```
+
+Fact缓存提供两种方式，redis和jsonfile，对于*大规模基础设施*的管理有必要进行相关配置。
+
+
+## 注册变量
+
+变量的另一个作用是在运行时保存命令的执行结果，以备后续调用。如下所示：
+
+``` YAML
+- hosts: web_servers
+
+  tasks:
+
+     - shell: /usr/bin/foo
+       register: foo_result
+       ignore_errors: True
+
+     - shell: /usr/bin/bar
+       when: foo_result.rc == 5
+```
+注册变量与facts的生命周期类似
+
+## 运行时转递变量
+
+Example：
+
+``` YAML
+---
+
+- hosts: '{{ hosts }}'
+  remote_user: '{{ user }}'
+
+  tasks:
+     - ...
+```
+运行时传递变量
+
+```bash
+ansible-playbook release.yml --extra-vars "hosts=vipers user=starbuck"
+```
+
+可通过`--extra-vars @a.json`，运行时应用json文件传递变量，也可以直接提供josn String
+
+# 条件选择
+
+## When语句
+
+实例：
+
+``` YAML
+tasks:
+  - name: "shutdown Debian flavored systems"
+    command: /sbin/shutdown -t now
+    when: ansible_os_family == "Debian"
+```
+
+==注意jinja2的过滤器的使用，会提供丰富的功能==
+
