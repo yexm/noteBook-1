@@ -351,7 +351,7 @@ ansible-playbook release.yml --extra-vars "hosts=vipers user=starbuck"
 
 可通过`--extra-vars @a.json`，运行时应用json文件传递变量，也可以直接提供josn String
 
-# 条件选择
+# 流程控制
 
 ## When语句
 
@@ -366,3 +366,80 @@ tasks:
 
 ***注意jinja2的过滤器的使用，会提供丰富的功能***
 
+如果一个变量不存在,你可以使用Jinja2的`defined`命令跳过或略过.例如:
+
+``` YAML
+tasks:
+    - shell: echo "I've got '{{ foo }}' and am not afraid to use it!"
+      when: foo is defined
+
+    - fail: msg="Bailing out. this play requires 'bar'"
+      when: bar is not defined
+```
+
+## 循环
+
+### 标准循环
+
+``` YAML
+- name: add several users
+  user: name={{ item }} state=present groups=wheel
+  with_items:
+     - testuser1
+     - testuser2
+```
+
+`with_items:{{somelist}}`可以通过变量文件或vars中定义列表来提供循环体。	
+
+使用 ‘with_items’ 用于迭代的条目类型不仅仅支持简单的字符串列表.如果你有一个哈希列表,那么你可以用以下方式来引用子项:
+
+``` YAML
+- name: add several users
+  user: name={{ item.name }} state=present groups={{ item.groups }}
+  with_items:
+    - { name: 'testuser1', groups: 'wheel' }
+    - { name: 'testuser2', groups: 'root' }
+```
+
+如果同时使用 `when` 和 `with_items` （或其它循环声明）,`when`声明会为每个条目单独执行
+
+**嵌套循环**
+
+循环也可以嵌套， 使用`with_nested`:
+
+``` YAML
+- name: give users access to multiple databases
+  mysql_user: name={{ item[0] }} priv={{ item[1] }}.*:ALL append_privs=yes password=foo
+  with_nested:
+    - [ 'alice', 'bob' ]
+    - [ 'clientdb', 'employeedb', 'providerdb' ]
+```
+
+使用with_dict循环哈希表的内容：
+
+有如下变量
+
+``` YAML
+---
+- hosts: node
+  vars:
+    users:
+      liuzhi:
+        name: Liu Zhi
+        tel: 13611111111
+      zhangsan:
+        name: Zhang San
+        tel: 15111111111
+  tasks:
+  - name: 循环测试
+    command: echo {{ item.key }} {{ item.value.name }} -- {{ item.value.tel }}
+    with_dict: "{{ users }}"
+```
+OutPut： 
+
+``` bash
+TASK [循环测试] *************************************************************************************************************************************************************************************
+changed: [centos7] => (item={'key': 'liuzhi', 'value': {'name': 'Liu Zhi', 'tel': 13611111111}}) => {"ansible_loop_var": "item", "changed": true, "cmd": ["echo", "liuzhi", "Liu", "Zhi", "--", "13611111111"], "delta": "0:00:00.001869", "end": "2020-08-12 13:57:02.772573", "item": {"key": "liuzhi", "value": {"name": "Liu Zhi", "tel": 13611111111}}, "rc": 0, "start": "2020-08-12 13:57:02.770704", "stderr": "", "stderr_lines": [], "stdout": "liuzhi Liu Zhi -- 13611111111", "stdout_lines": ["liuzhi Liu Zhi -- 13611111111"]}
+changed: [centos7] => (item={'key': 'zhangsan', 'value': {'name': 'Zhang San', 'tel': 15111111111}}) => {"ansible_loop_var": "item", "changed": true, "cmd": ["echo", "zhangsan", "Zhang", "San", "--", "15111111111"], "delta": "0:00:00.001715", "end": "2020-08-12 13:57:02.944683", "item": {"key": "zhangsan", "value": {"name": "Zhang San", "tel": 15111111111}}, "rc": 0, "start": "2020-08-12 13:57:02.942968", "stderr": "", "stderr_lines": [], "stdout": "zhangsan Zhang San -- 15111111111", "stdout_lines": ["zhangsan Zhang San -- 15111111111"]}
+
+```
