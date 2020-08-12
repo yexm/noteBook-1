@@ -443,3 +443,26 @@ changed: [centos7] => (item={'key': 'liuzhi', 'value': {'name': 'Liu Zhi', 'tel'
 changed: [centos7] => (item={'key': 'zhangsan', 'value': {'name': 'Zhang San', 'tel': 15111111111}}) => {"ansible_loop_var": "item", "changed": true, "cmd": ["echo", "zhangsan", "Zhang", "San", "--", "15111111111"], "delta": "0:00:00.001715", "end": "2020-08-12 13:57:02.944683", "item": {"key": "zhangsan", "value": {"name": "Zhang San", "tel": 15111111111}}, "rc": 0, "start": "2020-08-12 13:57:02.942968", "stderr": "", "stderr_lines": [], "stdout": "zhangsan Zhang San -- 15111111111", "stdout_lines": ["zhangsan Zhang San -- 15111111111"]}
 
 ```
+
+**对文件列表使用循环**
+
+使用`with_fileglob`循环文件列表
+
+``` YAML
+---
+- hosts: all
+
+  tasks:
+
+    # first ensure our target directory exists
+    - file: dest=/etc/fooapp state=directory
+
+    # copy each file over that matches the given pattern
+    - copy: src={{ item }} dest=/etc/fooapp/ owner=root mode=600
+      with_fileglob:
+        - /playbooks/files/fooapp/*
+```
+在role中使用时相对路径时，ansible会把路径映射到roles/rolename/files目录中。
+
+> `with_subelements`使用方法未理解透彻
+
