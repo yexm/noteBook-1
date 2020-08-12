@@ -464,5 +464,5 @@ changed: [centos7] => (item={'key': 'zhangsan', 'value': {'name': 'Zhang San', '
 ```
 在role中使用时相对路径时，ansible会把路径映射到roles/rolename/files目录中。
 
-> `with_subelements`使用方法未理解透彻
+ ***`with_subelements`使用方法未理解透彻***
 
