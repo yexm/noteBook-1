@@ -570,3 +570,59 @@ roles/
     monitoring/           # ""
     fooapp/               # ""
 ```
+
+动态的管理Inventory是一个非常普遍的需求。
+
+## 区分环境
+
+## 使用Group和Host变量
+
+## 顶层的PlayBook应按照角色分离
+
+## 区分Task和Handler，并分配到Role中
+
+## 通过角色分组
+
+## Keep It Simple
+
+## 版本控制
+IaC的核心。
+
+
+
+# 异步操作和轮询
+
+使用async指令启动异步机制，poll设置轮询频率。示例如下：
+
+``` YAML
+---
+
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+  - name: simulate long running op (15 sec), wait for up to 45 sec, poll every 5 sec
+    command: /bin/sleep 15
+    async: 45
+    poll: 5
+```
+当设置poll为0时，异步轮询将不再关注执行结果。
+
+如需稍后检查异步任务状态，参考如下配置：
+
+``` YAML
+---
+# Requires ansible 1.8+
+- name: 'YUM - fire and forget task'
+  yum: name=docker-io state=installed
+  async: 1000
+  poll: 0
+  register: yum_sleeper
+
+- name: 'YUM - check on fire and forget task'
+  async_status: jid={{ yum_sleeper.ansible_job_id }}
+  register: job_result
+  until: job_result.finished
+  retries: 30
+```
