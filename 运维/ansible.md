@@ -590,7 +590,7 @@ IaC的核心。
 
 
 
-# 异步操作和轮询
+## 异步操作和轮询
 
 使用async指令启动异步机制，poll设置轮询频率。示例如下：
 
@@ -626,3 +626,23 @@ IaC的核心。
   until: job_result.finished
   retries: 30
 ```
+
+## 使用标签
+
+当一个大型的基础设施playbook管理中，你会有只执行指定部分task的需求，这里就用到了tags，如下实例：
+
+``` YAML
+tasks:
+
+    - yum: name={{ item }} state=installed
+      with_items:
+         - httpd
+         - memcached
+      tags:
+         - packages
+
+    - template: src=templates/src.j2 dest=/etc/foo.conf
+      tags:
+         - configuration
+```
+可通过`ansible-playbook example.yml --tags "configuration,packages"`选择需要执行的任务。
